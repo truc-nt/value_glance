@@ -14,10 +14,14 @@ const baseFetch = async <T>(
     : `${SERVER_BASE_URL}${endpoint}`;
 
   const res = await fetch(uri, options);
-  if (!res.ok) {
-    throw new Error(`${res.status}`);
-  }
   const data: T = await res.json();
+  if (!res.ok) {
+    throw new Error(
+      `Request failed with status ${res.status}: ${
+        (data as { "Error Message"?: string })["Error Message"]
+      }`
+    );
+  }
   return data;
 };
 

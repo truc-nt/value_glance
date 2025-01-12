@@ -10,7 +10,9 @@ income_statment_bp = Blueprint('income_statment_bp', __name__)
 def getIncomeStatement():
     returnKeys = ["date", "revenue", "netIncome", "grossProfit", "eps", "operatingIncome"]
     try:
-        data = Client().getIncomeStatement()
+        data, status = Client().getIncomeStatement()
+        if status != 200:
+            return jsonify(data), 500
         filteredData = []
         for item in data:
             match = True
@@ -34,8 +36,8 @@ def getIncomeStatement():
                 filteredData = sorted(filteredData, key=lambda x: x[sortKey], reverse=True)
             else:
                 filteredData = sorted(filteredData, key=lambda x: x[sortKey])
-    except Exception:
-        return "An unexpected error occurred. Please try again later", 500
+    except Exception as e:
+        return jsonify(e), 500
 
     return jsonify([ {key: item[key] for key in returnKeys if key in item} for item in filteredData ]), 200
 

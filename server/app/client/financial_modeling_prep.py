@@ -8,7 +8,4 @@ class Client:
 
     def getIncomeStatement(self):
         response = requests.get(f'{self.base_url}/v3/income-statement/AAPL?period=annual&apikey={self.api_key}')
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return None
+        return response.json(), response.status_code

@@ -146,7 +146,12 @@ const IncomingStatementDataGrid = () => {
         </div>
       </div>
       <Table
-        dataSource={filteredIncomingStatement}
+        dataSource={filteredIncomingStatement?.map(
+          (item: IGetIncomeStatementResponse, index: number) => ({
+            ...item,
+            key: index,
+          })
+        )}
         columns={columns}
         className="w-full"
         scroll={{ x: "max-content" }}
