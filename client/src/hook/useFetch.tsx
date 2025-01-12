@@ -4,7 +4,7 @@ import { App } from "antd";
 
 const useFetch = (
   fetcher: (...params: any[]) => Promise<any>,
-  ...initialParams: any[]
+  params: any[] = []
 ) => {
   const [data, setData] = useState<any>(null);
   const { message } = App.useApp();
@@ -22,10 +22,10 @@ const useFetch = (
   );
 
   useEffect(() => {
-    fetchData(...initialParams);
-  }, [fetchData]);
+    fetchData(...params);
+  }, [fetchData, ...params]);
 
-  return { data, fetchData };
+  return { data };
 };
 
 export default useFetch;

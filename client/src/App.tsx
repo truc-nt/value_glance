@@ -10,7 +10,7 @@ function App() {
   const [isFrontendMode, setIsFrontendMode] = useState(true);
   return (
     <AntdApp>
-      <div className="flex flex-col h-screen w-screen items-center p-8">
+      <div className="flex flex-col items-center p-8">
         <LoadingProvider>
           <div className="w-full flex justify-end items-center space-x-2">
             <span>Handle with</span>{" "}

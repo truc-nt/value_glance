@@ -57,10 +57,6 @@ interface IFilterState {
 }
 
 const IncomeStatementDataGridBE = () => {
-  const getIncomeStatementWithLoading = useLoading(getIncomeStatement);
-  const { data: incomeStatementment, fetchData: fetchIncomeStatementment } =
-    useFetch(getIncomeStatementWithLoading, {}, false);
-
   const [rangeFilter, setRangeFilter] = useState<IFilterState>({
     year: [null, null],
     revenue: [null, null],
@@ -68,23 +64,31 @@ const IncomeStatementDataGridBE = () => {
   });
   const [sorter, setSorter] = useState<any>(null);
 
+  const [queryParam, setQueryParam] = useState({});
+  const getIncomeStatementWithLoading = useLoading(getIncomeStatement);
+  const { data: incomeStatementment } = useFetch(
+    getIncomeStatementWithLoading,
+    [queryParam, false]
+  );
+
   const handleTableChange = (_: any, __: any, sorter: any) => {
     setSorter(sorter);
   };
 
   useEffect(() => {
-    const queryParam: { [key: string]: any } = {};
+    const _queryParam: { [key: string]: any } = {};
     Object.entries(rangeFilter).forEach(([key, range]) => {
       if (range[0] !== null && range[1] !== null) {
-        queryParam[`filter_${key}_range`] = range;
+        _queryParam[`filter_${key}_range`] = range;
       }
     });
     if (sorter && sorter.field && sorter.order) {
-      queryParam["sort"] = sorter.field;
-      queryParam["sort_order"] = sorter.order === "ascend" ? "asc" : "desc";
+      _queryParam["sort"] = sorter.field;
+      _queryParam["sort_order"] = sorter.order === "ascend" ? "asc" : "desc";
     }
-    if (Object.keys(queryParam).length > 0) {
-      fetchIncomeStatementment(queryParam, false);
+
+    if (JSON.stringify(queryParam) !== JSON.stringify(_queryParam)) {
+      setQueryParam(_queryParam);
     }
   }, [rangeFilter, sorter]);
 
